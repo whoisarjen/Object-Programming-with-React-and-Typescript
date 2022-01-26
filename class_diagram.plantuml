@@ -1,0 +1,60 @@
+@startuml class
+
+Class History {
+    id: int
+    whenAdded: Date
+    amount: Double
+    sender_ID: int
+    receiver_ID: int
+    worker_ID: int
+    note: String
+    type: String
+}
+
+Class Report {
+    Report()
+}
+    Report -- BankSystem : Możliwość zgłaszania
+    Report ..> government : Zgłaszanie (API)
+
+Class BankSystem {
+    database: MySQL
+    Deposit()
+    CheckHistory()
+    Loan()
+    Withdraw()
+    Transfer()
+}
+    BankSystem *-- Worker
+    BankSystem *-- Client
+    ' BankSystem ..> History : Wykonanie opracji
+    BankSystem *-- History : Wykonanie opracji
+    BankSystem -- WebUI
+
+Class Desk {
+    amount: Double
+}
+    Desk -- WebUI : Zarządzanie operacjami
+    Desk -- Worker
+
+Class Printer {
+    Print()
+}
+    Printer -- Desk : Drukowanie potwierdzenia
+
+
+Class Worker {}
+    Worker --|> User
+
+Class Client {}
+    Client --|> User
+
+Class User {
+    id: int
+    name: String
+    surname: String
+    Pesel: int
+}
+
+
+@enduml

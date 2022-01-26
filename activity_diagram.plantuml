@@ -1,0 +1,90 @@
+@startuml activity
+
+(*) --> "Client"
+--> "Choose operaction"
+if ""
+    --> [Check history] "Show history"
+    --> (*)
+else
+    --> [Deposit] "Receive cash"
+    --> [Deposit] "Create record in history"
+    if "10.000+?"
+        --> [YES] Report
+        if "Deposit confirmation?"
+            --> [YES] "Print confirmation"
+            --> (*)
+        else
+            --> [NO] (*)
+        endif
+    else
+        [NO] if "Deposit confirmation?"
+            --> [YES] "Print confirmation"
+            --> (*)
+        else
+            --> [NO] (*)
+        endif
+    endif
+else
+    --> [Withdraw] "Verify"
+    --> [Withdraw] "Create record in history"
+    if "10.000+?"
+        --> [YES] Report
+        if "Withdraw confirmation?"
+            --> [YES] "Print confirmation"
+            --> [Withdraw] "Payout cash"
+            --> (*)
+        else
+            --> [NO] "Payout cash"
+            --> (*)
+        endif
+    else
+        [NO] if "Withdraw confirmation?"
+            --> [YES] "Print confirmation"
+            --> [Withdraw] "Payout cash"
+            --> (*)
+        else
+            --> [NO] "Payout cash"
+            --> (*)
+        endif
+    endif
+else 
+    --> [Loan] "Verify"
+    --> [Loan] "Create record in history"
+    if "10.000+?"
+        --> [YES] Report
+        if "Loan confirmation?"
+            --> [YES] "Print confirmation"
+            --> (*)
+        else
+            --> [NO] (*)
+        endif
+    else
+        [NO] if "Loan confirmation?"
+            --> [YES] "Print confirmation"
+            --> (*)
+        else
+            --> [NO] (*)
+        endif
+    endif
+else 
+    --> [Transfer] "Verify"
+    --> [Transfer] "Create record in history"
+    if "10.000+?"
+        --> [YES] Report
+        if "Transfer confirmation?"
+            --> [YES] "Print confirmation"
+            --> (*)
+        else
+            --> [NO] (*)
+        endif
+    else
+        [NO] if "Transfer confirmation?"
+            --> [YES] "Print confirmation"
+            --> (*)
+        else
+            --> [NO] (*)
+        endif
+    endif
+endif
+
+@enduml

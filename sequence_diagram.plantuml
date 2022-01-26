@@ -1,0 +1,105 @@
+@startuml sequence
+
+actor Client
+actor Worker
+actor BankSystem
+database MySQL
+actor Desk
+actor Government
+
+group Check history
+    Client -> Worker : CheckHistory
+    Worker --> Client : Required questions
+    Client -> Worker : informations (ACCOUNT NUMBER)
+    Worker -> BankSystem : CheckHistory(informations)
+    BankSystem -> MySQL : query
+    return RESULTS
+    BankSystem --> Worker : RESULTS
+    Worker --> Client : RESULTS
+end
+
+group Deposit
+    Client -> Worker : Deposit
+    Worker --> Client : Required questions
+    Client -> Worker : informations (12000PLN, ACCOUNT NUMBER)
+    Worker -> Desk : Put cash
+        Desk -> Desk : Change amount
+    Desk --> Worker
+    Worker -> BankSystem : Deposit(informations)
+    BankSystem -> MySQL : query
+    return OBJECT
+    BankSystem -> Government : Report(OBJECT)
+    return
+    BankSystem --> Worker : OBJECT.PDF
+    Worker --> Client : Confirmation?
+    Client -> Worker : Yes
+    Worker -> Printer : Print(OBJECT.PDF)
+    Printer --> Worker : CONFIRMATION
+    Worker --> Client : CONFIRMATION
+end
+
+group Withdraw
+    Client -> Worker : Withdraw
+    Worker --> Client : Required questions
+    Client -> Worker : informations (12000PLN, ACCOUNT NUMBER)
+    Worker -> BankSystem : CheckHistory(informations)
+    BankSystem -> MySQL : query
+    return RESULTS
+    BankSystem --> Worker : RESULTS
+    Worker -> Worker : Checking transaction
+    Worker -> BankSystem : Withdraw(informations)
+    BankSystem -> MySQL : query
+    return OBJECT
+    BankSystem -> Government : Report(OBJECT)
+    return
+    BankSystem --> Worker : OBJECT.PDF
+    Worker -> Desk : Get cash
+        Desk -> Desk : Change amount
+    Desk --> Worker : MONEY
+    Worker --> Client : Confirmation?
+    Client -> Worker : Yes
+    Worker -> Printer : Print(OBJECT.PDF)
+    Printer --> Worker : CONFIRMATION
+    Worker --> Client : CONFIRMATION
+    Worker --> Client : MONEY
+end
+
+group Loan
+    Client -> Worker : Loan
+    Worker --> Client : Required questions
+    Client -> Worker : informations (5000PLN, ACCOUNT NUMBER)
+    Worker -> BankSystem : CheckHistory(informations)
+    BankSystem -> MySQL : query
+    return RESULTS
+    BankSystem --> Worker : RESULTS
+    Worker -> Worker : Checking transaction
+    Worker -> BankSystem : Loan(informations)
+    BankSystem -> MySQL : query
+    return OBJECT
+    BankSystem --> Worker : OBJECT.PDF
+    Worker --> Client : Confirmation?
+    Client -> Worker : Yes
+    Worker -> Printer : Print(OBJECT.PDF)
+    Printer --> Worker : CONFIRMATION
+    Worker --> Client : CONFIRMATION
+end
+
+group Transfer
+    Client -> Worker : Transfer
+    Worker --> Client : Required questions
+    Client -> Worker : informations (5000PLN, ACCOUNT NUMBER, TRANSFER ACCOUNT NUMBER)
+    Worker -> BankSystem : CheckHistory(informations)
+    BankSystem -> MySQL : query
+    return RESULTS
+    BankSystem --> Worker : RESULTS
+    Worker -> Worker : Checking transaction
+    Worker -> BankSystem : Transfer(informations)
+    BankSystem -> MySQL : query
+    return OBJECT
+    BankSystem --> Worker : OBJECT.PDF
+    Worker --> Client : Confirmation?
+    Client -> Worker : No
+    return
+end
+
+@enduml

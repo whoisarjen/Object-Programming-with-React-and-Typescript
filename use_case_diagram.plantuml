@@ -1,0 +1,55 @@
+@startuml use
+left to right direction
+
+actor "Client" as client
+actor "Worker" as worker
+actor "Government" as government
+
+rectangle Bank {
+    usecase "Loan" as loan
+    usecase "Deposit" as deposit
+    usecase "Withdraw" as withdraw
+    usecase "Transfer" as transfer
+    usecase "Check history" as checkHistory
+    usecase "Print confirmation" as confirmation
+
+    usecase "Handling cash" as handlingCash
+        deposit --> handlingCash : <<invoke>>
+        handlingCash --|> withdraw : Weryfikacja pozytywna
+
+    usecase "Add records to history" as createAccountRecord
+        deposit --> createAccountRecord : <<invoke>>
+        confirmation --|> createAccountRecord : Na żądanie
+
+    usecase "Verify user's situation" as verify
+        loan --> verify : <<invoke>>
+        withdraw --> verify : <<invoke>>
+        transfer --> verify : <<invoke>>
+        verify --> checkHistory : <<invoke>>
+        createAccountRecord --|> verify : Weryfikacja pozytywna
+}
+
+worker -- loan
+worker -- deposit
+worker -- withdraw
+worker -- transfer
+worker -- checkHistory
+
+worker -- handlingCash
+worker -- verify
+worker -- createAccountRecord
+worker -- confirmation
+
+' ------------
+
+client -- loan
+client -- deposit
+client -- withdraw
+client -- transfer
+client -- checkHistory
+
+client -- handlingCash
+
+government --|> createAccountRecord : "Raportowanie transakcji 10.000+"
+
+@enduml
