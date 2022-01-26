@@ -13,8 +13,8 @@ export class Desk implements DeskProps {
         })
     }
 
-    changeAmount(value: number) {
-        this.amount += value;
+    changeAmount(value: number | string) {
+        this.amount += parseFloat(value as string);
         return this;
     }
 }

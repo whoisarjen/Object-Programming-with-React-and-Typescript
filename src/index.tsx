@@ -9,6 +9,8 @@ import './main.css';
 import App from './App';
 import Deposit from './Deposit';
 import Navbar from './components/Navbar'
+import CheckHistory from './CheckHistory';
+import Withdraw from './Withdraw';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -17,6 +19,8 @@ ReactDOM.render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/deposit" element={<Deposit />} />
+        <Route path="/withdraw" element={<Withdraw />} />
+        <Route path="/check-history" element={<CheckHistory />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
