@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { defaultDesk } from './classes/Desk.class'
 import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -8,12 +8,15 @@ import Button from '@mui/material/Button';
 import { defaultWorker } from './classes/Worker.class'
 import { defaultClient } from './classes/Client.class'
 import { defaultBankSystem } from './classes/BankSystem.class'
+import ListComponent from "./components/ListComponent";
+import { HistoryProps } from "./classes/History.class";
 
 const Deposit: FunctionComponent = () => {
     const [date, setDate] = useState(new Date())
     const [amount, setAmount] = useState(0)
+    const [array, setArray] = useState<Array<HistoryProps>>([])
 
-    const makeDeposit = () => {
+    const makeDeposit = async () => {
         defaultDesk.changeAmount(amount)
         defaultBankSystem.deposit({
             whenAdded: date,
@@ -24,7 +27,14 @@ const Deposit: FunctionComponent = () => {
             note: null,
             type: 0
         })
+        setArray(await defaultBankSystem.checkHistory({ client: defaultClient }))
     }
+
+    useEffect(() => {
+        (async () => {
+            setArray(await defaultBankSystem.checkHistory({ client: defaultClient }))
+        })()
+    }, [])
 
     return (
         <div className="deposit">
@@ -32,8 +42,9 @@ const Deposit: FunctionComponent = () => {
             <TextField id="outlined-basic" label="Receiver ID" variant="outlined" disabled value={defaultClient.id} />
             <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
-                    label="Basic example"
+                    label="Date"
                     value={date}
+                    minDate={new Date()}
                     onChange={(newValue: any) => {
                         setDate(newValue);
                     }}
@@ -42,6 +53,7 @@ const Deposit: FunctionComponent = () => {
             </LocalizationProvider>
             <TextField id="outlined-basic" label="amount" variant="outlined" onChange={(e: any) => setAmount(e.target.value)} />
             <Button variant="contained" onClick={makeDeposit}>Send</Button>
+            <ListComponent array={array} />
         </div>
     )
 }

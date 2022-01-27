@@ -1,31 +1,31 @@
 import { FunctionComponent, useEffect, useState } from "react";
-import { defaultDesk } from './classes/Desk.class'
+import { defaultBankSystem } from "./classes/BankSystem.class";
+import { defaultClient } from "./classes/Client.class";
+import { HistoryProps } from "./classes/History.class";
+import { defaultWorker } from "./classes/Worker.class";
+import ListComponent from "./components/ListComponent";
 import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import Button from '@mui/material/Button';
-import { defaultWorker } from './classes/Worker.class'
-import { defaultClient } from './classes/Client.class'
-import { defaultBankSystem } from './classes/BankSystem.class'
-import ListComponent from "./components/ListComponent";
-import { HistoryProps } from "./classes/History.class";
 
-const Withdraw: FunctionComponent = () => {
+const Transfer: FunctionComponent = () => {
     const [date, setDate] = useState(new Date())
     const [amount, setAmount] = useState(0)
     const [array, setArray] = useState<Array<HistoryProps>>([])
+    const [note, setNote] = useState('')
+    const receiver_ID = 1111111111;
 
-    const makeWithdraw = async () => {
-        defaultDesk.changeAmount(amount)
-        defaultBankSystem.withdraw({
+    const makeTransfer = async () => {
+        defaultBankSystem.transfer({
             whenAdded: date,
             amount,
-            receiver_ID: 0, // 0 = Bank
             sender_ID: defaultClient.id,
+            receiver_ID: receiver_ID,
             worker_ID: defaultWorker.id,
-            note: null,
-            type: 1
+            note,
+            type: 2
         })
         setArray(await defaultBankSystem.checkHistory({ client: defaultClient }))
     }
@@ -37,9 +37,10 @@ const Withdraw: FunctionComponent = () => {
     }, [])
 
     return (
-        <div className="withdraw">
+        <>
             <TextField id="outlined-basic" label="Worker ID" variant="outlined" disabled value={defaultWorker.id} />
             <TextField id="outlined-basic" label="Sender ID" variant="outlined" disabled value={defaultClient.id} />
+            <TextField id="outlined-basic" label="Receiver ID" variant="outlined" disabled value={receiver_ID} />
             <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
                     label="Date"
@@ -52,10 +53,11 @@ const Withdraw: FunctionComponent = () => {
                 />
             </LocalizationProvider>
             <TextField id="outlined-basic" label="amount" variant="outlined" onChange={(e: any) => setAmount(e.target.value)} />
-            <Button variant="contained" onClick={makeWithdraw}>Send</Button>
+            <TextField id="outlined-basic" label="Note" variant="outlined" value={note} onChange={(e) => setNote(e.target.value)}/>
+            <Button variant="contained" onClick={makeTransfer}>Send</Button>
             <ListComponent array={array} />
-        </div>
+        </>
     )
 }
 
-export default Withdraw;
+export default Transfer;

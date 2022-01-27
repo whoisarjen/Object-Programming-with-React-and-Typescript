@@ -1,17 +1,21 @@
-import { FunctionComponent } from "react";
-import Button from '@mui/material/Button';
+import { FunctionComponent, useEffect, useState } from "react";
 import { defaultClient } from './classes/Client.class'
 import { defaultBankSystem } from './classes/BankSystem.class'
+import ListComponent from "./components/ListComponent";
+import { HistoryProps } from "./classes/History.class";
 
 const CheckHistory: FunctionComponent = () => {
+    const [array, setArray] = useState<Array<HistoryProps>>([])
 
-    const makeCheckHistory = () => {
-        defaultBankSystem.checkHistory({ client: defaultClient })
-    }
+    useEffect(() => {
+        (async () => {
+            setArray(await defaultBankSystem.checkHistory({ client: defaultClient }))
+        })()
+    }, [])
 
     return (
         <div className="deposit">
-            <Button variant="contained" onClick={makeCheckHistory}>check</Button>
+            <ListComponent array={array} />
         </div>
     )
 }

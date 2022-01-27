@@ -36,7 +36,6 @@ export class BankSystem implements BankSystemProps {
                 type: HistoryType
             },
     ) {
-        console.log(`Sending data to ${this.database}`)
         this.history.push(
             new History({
                 id: new Date().getTime(),
@@ -51,19 +50,49 @@ export class BankSystem implements BankSystemProps {
         )
     }
 
-    checkHistory({ client }: { client: ClientProps }) {
-        console.log(`Loading data from ${this.database}`)
-        console.log(`----- History for ${client.name} -----`)
+    async checkHistory({ client }: { client: ClientProps }) {
+        const response: Array<HistoryProps> = []
         this.history.forEach((x: HistoryProps) => {
             if (x.sender_ID == client.id || x.receiver_ID == client.id) {
-                console.log(`User: ${x.sender_ID} to ${x.receiver_ID} ${x.whenAdded} ${HistoryType[x.type]} ${x.amount}`)
-                console.log('-')
+                response.push(x)
             }
         })
+        return response.reverse();
     }
 
-    loan() {
-
+    loan(
+        {
+            whenAdded,
+            amount,
+            sender_ID,
+            receiver_ID,
+            worker_ID,
+            note,
+            type
+        }
+            :
+            {
+                whenAdded: Date,
+                amount: number,
+                sender_ID: number,
+                receiver_ID: number,
+                worker_ID: number,
+                note: string | null,
+                type: HistoryType
+            },
+    ) {
+        this.history.push(
+            new History({
+                id: new Date().getTime(),
+                whenAdded,
+                amount,
+                sender_ID,
+                receiver_ID,
+                worker_ID,
+                note,
+                type
+            })
+        )
     }
 
     withdraw(
@@ -87,7 +116,6 @@ export class BankSystem implements BankSystemProps {
                 type: HistoryType
             },
     ) {
-        console.log(`Sending data to ${this.database}`)
         this.history.push(
             new History({
                 id: new Date().getTime(),
@@ -102,8 +130,39 @@ export class BankSystem implements BankSystemProps {
         )
     }
 
-    transfer() {
-
+    transfer(
+        {
+            whenAdded,
+            amount,
+            sender_ID,
+            receiver_ID,
+            worker_ID,
+            note,
+            type
+        }
+            :
+            {
+                whenAdded: Date,
+                amount: number,
+                sender_ID: number,
+                receiver_ID: number,
+                worker_ID: number,
+                note: string | null,
+                type: HistoryType
+            },
+    ) {
+        this.history.push(
+            new History({
+                id: new Date().getTime(),
+                whenAdded,
+                amount,
+                sender_ID,
+                receiver_ID,
+                worker_ID,
+                note,
+                type
+            })
+        )
     }
 }
 

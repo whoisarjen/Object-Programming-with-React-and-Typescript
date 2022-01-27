@@ -5,9 +5,7 @@ function App() {
     console.log(defaultDesk)
     
     return (
-        <div className="App">
-            asdasasd
-        </div>
+        <div className="App"></div>
     );
 }
 
