@@ -33,6 +33,7 @@ Class BankSystem {
 
 Class Desk {
     amount: Double
+    changeAmount()
 }
     Desk -- WebUI : Zarządzanie operacjami
     Desk -- Worker
