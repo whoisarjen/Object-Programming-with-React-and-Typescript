@@ -29,13 +29,14 @@ Class BankSystem {
     BankSystem *-- Client
     ' BankSystem ..> History : Wykonanie opracji
     BankSystem *-- History : Wykonanie opracji
-    BankSystem -- WebUI
+    ' BankSystem -- WebUI
 
 Class Desk {
     amount: Double
     changeAmount()
 }
-    Desk -- WebUI : Zarządzanie operacjami
+    ' Desk -- WebUI : Zarządzanie operacjami
+    Desk -- BankSystem : Zarządzanie operacjami
     Desk -- Worker
 
 Class Printer {
