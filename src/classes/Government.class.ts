@@ -1,5 +1,3 @@
-export interface GovernmentProps {
-
-}
+export interface GovernmentProps { }
 
 export class Government implements GovernmentProps { }

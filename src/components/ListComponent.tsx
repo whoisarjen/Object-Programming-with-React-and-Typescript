@@ -15,7 +15,7 @@ const ListComponent: FunctionComponent<ListComponentProps> = ({ array }) => {
                 array &&
                 array.length > 0 &&
                 array.map(x =>
-                    <ListItem>
+                    <ListItem key={new Date().getTime()}>
                         <ListItemText primary={`From ${x.sender_ID} to ${x.receiver_ID}: ${x.amount}zł ${x.note ? x.note : ''} (${HistoryType[x.type]})`} secondary={x.whenAdded.toString()} />
                     </ListItem>
                 )

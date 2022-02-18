@@ -1,9 +1,7 @@
-export interface ReportProps {
-
-}
+export interface ReportProps { }
 
 export class Report implements ReportProps {
-    report(){
-        
+    report() {
+        console.log('Sending report...')
     }
 }
